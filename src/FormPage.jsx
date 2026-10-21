@@ -3,8 +3,10 @@ import { db } from "./firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export default function FormPage({ user }) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [first, setFirst] = useState("");
+  const [second, setSecond] = useState("");
+  const [third, setThird] = useState("");
+  const [fourth, setFourth] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -16,16 +18,20 @@ export default function FormPage({ user }) {
     try {
       // Add data to 'submissions' collection in Firestore
       await addDoc(collection(db, "submissions"), {
-        title,
-        description,
+        first,
+        second,
+        third,
+        fourth,
         userId: user.uid,
         userEmail: user.email,
         createdAt: serverTimestamp(),
       });
 
       setMessage("Data saved successfully to Firestore!");
-      setTitle("");
-      setDescription("");
+      setFirst("");
+      setSecond("");
+      setThird("");
+      setFourth("");
     } catch (error) {
       console.error("Error adding document: ", error);
       setMessage("Failed to save data: " + error.message);
@@ -43,18 +49,32 @@ export default function FormPage({ user }) {
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <input
           type="text"
-          placeholder="Title / Item Name"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          placeholder="First"
+          value={first}
+          onChange={(e) => setFirst(e.target.value)}
           required
           style={{ padding: "8px" }}
         />
-        <textarea
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+        <input
+          type="text"
+          placeholder="Second"
+          value={second}
+          onChange={(e) => setSecond(e.target.value)}
           required
-          rows="4"
+          style={{ padding: "8px" }}
+        />
+        <input
+          type="text"
+          placeholder="Third"
+          value={third}
+          onChange={(e) => setThird(e.target.value)}
+          style={{ padding: "8px" }}
+        />
+        <input
+          type="text"
+          placeholder="Fourth"
+          value={fourth}
+          onChange={(e) => setFourth(e.target.value)}
           style={{ padding: "8px" }}
         />
         <button type="submit" disabled={loading} style={{ padding: "10px", cursor: "pointer" }}>
